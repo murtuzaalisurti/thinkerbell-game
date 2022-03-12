@@ -5,13 +5,14 @@ import Game from './components/Game.jsx';
 function App() {
   const word = [];
 
-  const [isFirstWordTyped, setIsFirstWordTyped] = useState(false);
+  let firstType = false;
+  var date, date2, difference;
 
   useEffect(() => {
     const row1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
     const row2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
     const row3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
-    const row4 = ['BACKSPACE'];
+    const row4 = ['BACKSPACE', 'ENTER'];
 
     document.querySelectorAll('.row').forEach((row) => {
       row.innerHTML = "";
@@ -22,7 +23,11 @@ function App() {
         for (let i = 0; i < row.length; i++) {
           let btn = document.createElement('button');
           btn.classList.add(`class-${row[i]}`);
-          btn.innerText = 'clear';
+          if(row[i] === "ENTER"){
+            btn.innerText = 'Enter';
+          } else {
+            btn.innerText = 'Clear';
+          }
           document.querySelector(`#row-${rownum}`).appendChild(btn);
         }
       } else {
@@ -58,15 +63,28 @@ function App() {
   };
 
   const handler = (e) => {
-    setIsFirstWordTyped(true);
     if (e.key.toUpperCase() === "BACKSPACE") {
       word.pop(e.key.toUpperCase());
     } else if (e.key.toUpperCase() === "SPACE") {
       return 0;
+    } else if(e.key.toUpperCase() === "ENTER"){
+      date2 = new Date().getTime();
+      difference = date2 - date;
+      console.log(difference/1000)
+      word.length = 0;
+      console.log(word)
     } else {
+      isFirstLetterTyped.current = true;
       word.push(e.key.toUpperCase());
     }
-    console.log(e);
+
+
+    if(word.length === 1){
+      date = new Date().getTime();
+    }
+    console.log(date, date2);
+
+
     document.querySelectorAll("button").forEach((btn) => {
 
       if (btn.classList.contains(`class-${e.key.toUpperCase()}`)) {
@@ -74,34 +92,56 @@ function App() {
 
         setTimeout(() => {
           btn.blur();
-        }, 500)
+        }, 150)
       }
     })
     document.querySelector('.output').innerHTML = word.join('');
+    console.log(isFirstLetterTyped)
   };
 
   useEventListener("keydown", handler);
 
+  const isFirstLetterTyped = useRef();
+  useEffect(() => {
+    isFirstLetterTyped.current = false;
+  }, [])
+
+  console.log(isFirstLetterTyped);
 
   useEffect(() => {
     document.querySelectorAll('button').forEach((e) => {
       e.addEventListener("click", () => {
-        setIsFirstWordTyped(true);
-        console.log(e.innerText.toLowerCase());
+        isFirstLetterTyped.current = true;
+
         e.focus();
         if (e.classList.contains('class-BACKSPACE')) {
           word.pop(e.innerText.toUpperCase());
+        } else if(e.classList.contains('class-ENTER')){
+          date2 = new Date().getTime();
+          difference = date2 - date;
+          console.log(difference/1000)
+          word.length = 0;
+          console.log(word)
         } else {
           word.push(e.innerText.toUpperCase());
         }
+
+        if(word.length === 1){
+          date = new Date().getTime();
+        }
+
         document.querySelector('.output').innerHTML = word.join('');
 
         setTimeout(() => {
           e.blur();
-        }, 500)
+        }, 150)
       })
     })
   })
+
+  if(isFirstLetterTyped.current === true) {
+    console.log(1)
+  }
   return (
     <>
       <Game />
