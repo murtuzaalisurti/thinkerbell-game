@@ -3,6 +3,7 @@ import './App.css';
 import Game from './components/Game.jsx';
 
 function App() {
+  // const [words, setWords] = useState(["Murtuza", "Titanic", "Robert"]);
   const word = [];
 
   let firstType = false;
@@ -68,11 +69,7 @@ function App() {
     } else if (e.key.toUpperCase() === "SPACE") {
       return 0;
     } else if(e.key.toUpperCase() === "ENTER"){
-      date2 = new Date().getTime();
-      difference = date2 - date;
-      console.log(difference/1000)
-      word.length = 0;
-      console.log(word)
+      console.log(typing_time(date));
     } else {
       isFirstLetterTyped.current = true;
       word.push(e.key.toUpperCase());
@@ -82,16 +79,18 @@ function App() {
     if(word.length === 1){
       date = new Date().getTime();
     }
-    console.log(date, date2);
+    // console.log(date, date2);
 
 
     document.querySelectorAll("button").forEach((btn) => {
 
       if (btn.classList.contains(`class-${e.key.toUpperCase()}`)) {
-        btn.focus();
+        // btn.focus();
+        btn.style.borderColor = "black";
 
         setTimeout(() => {
-          btn.blur();
+          // btn.blur();
+          btn.style.borderColor = "transparent";
         }, 150)
       }
     })
@@ -106,22 +105,20 @@ function App() {
     isFirstLetterTyped.current = false;
   }, [])
 
-  console.log(isFirstLetterTyped);
+  // console.log(isFirstLetterTyped);
 
   useEffect(() => {
     document.querySelectorAll('button').forEach((e) => {
       e.addEventListener("click", () => {
         isFirstLetterTyped.current = true;
 
-        e.focus();
+        // e.focus();
+        e.style.borderColor = "black";
+
         if (e.classList.contains('class-BACKSPACE')) {
           word.pop(e.innerText.toUpperCase());
         } else if(e.classList.contains('class-ENTER')){
-          date2 = new Date().getTime();
-          difference = date2 - date;
-          console.log(difference/1000)
-          word.length = 0;
-          console.log(word)
+          console.log(typing_time(date));
         } else {
           word.push(e.innerText.toUpperCase());
         }
@@ -133,15 +130,26 @@ function App() {
         document.querySelector('.output').innerHTML = word.join('');
 
         setTimeout(() => {
-          e.blur();
+          // e.blur();
+          e.style.borderColor = "transparent";
         }, 150)
       })
     })
   })
 
-  if(isFirstLetterTyped.current === true) {
-    console.log(1)
+  function typing_time(date){
+    date2 = new Date().getTime();
+    difference = date2 - date;
+    word.length = 0;
+    console.log(word)
+    return (difference/1000).toFixed(2);
   }
+
+  // if(isFirstLetterTyped.current === true) {
+  //   console.log(1)
+  // }
+  
+
   return (
     <>
       <Game />
