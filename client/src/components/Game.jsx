@@ -1,27 +1,19 @@
 import React, {useEffect, useState} from 'react'
 import Keyboard from './Keyboard';
-// const mongoose = require('mongoose');
-import {connect} from 'mongoose';
 
 const Game = () => {
   const [upcoming_words, setUpcomingWords] = useState(["Murtuza", "Titanic", "Robert"]);
   const [words, setWords] = useState([]);
   const [connState, setConnState] = useState(true);
-  const db_conn_uri = process.env.REACT_APP_MONGOURI;
 
   useEffect(() => {
-    connect(db_conn_uri, {
-      useNewUrlParser: true
-    });
-  }, [connState])
-  // const [timer, setTimer] = useState(false);
-
-  // let alter = false;
-
-  // let alter_time = setInterval(() => {
-  //   alter = !alter;
-  // }, 1000)
-  console.log(process.env.REACT_APP_MONGOURI);
+    fetch('/wordsData').then((res) => {
+      // console.log(data);
+      return res.json();
+    }).then((data) => {
+      console.log(data);
+    })
+  })
 
   useEffect(() => {
     let interval = setInterval(() => {
