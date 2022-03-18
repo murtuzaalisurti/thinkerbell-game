@@ -3,10 +3,7 @@ import './App.css';
 import Game from './components/Game.jsx';
 
 function App() {
-  // const [words, setWords] = useState(["Murtuza", "Titanic", "Robert"]);
   const word = [];
-
-  let firstType = false;
   var date, date2, difference;
 
   useEffect(() => {
@@ -71,7 +68,6 @@ function App() {
     } else if(e.key.toUpperCase() === "ENTER"){
       console.log(typing_time(date));
     } else {
-      isFirstLetterTyped.current = true;
       word.push(e.key.toUpperCase());
     }
 
@@ -79,40 +75,27 @@ function App() {
     if(word.length === 1){
       date = new Date().getTime();
     }
-    // console.log(date, date2);
 
 
     document.querySelectorAll("button").forEach((btn) => {
 
       if (btn.classList.contains(`class-${e.key.toUpperCase()}`)) {
-        // btn.focus();
         btn.style.borderColor = "black";
 
         setTimeout(() => {
-          // btn.blur();
           btn.style.borderColor = "transparent";
         }, 150)
       }
     })
     document.querySelector('.output').innerHTML = word.join('');
-    console.log(isFirstLetterTyped)
   };
 
   useEventListener("keydown", handler);
 
-  const isFirstLetterTyped = useRef();
-  useEffect(() => {
-    isFirstLetterTyped.current = false;
-  }, [])
-
-  // console.log(isFirstLetterTyped);
-
   useEffect(() => {
     document.querySelectorAll('button').forEach((e) => {
       e.addEventListener("click", () => {
-        isFirstLetterTyped.current = true;
 
-        // e.focus();
         e.style.borderColor = "black";
 
         if (e.classList.contains('class-BACKSPACE')) {
@@ -130,7 +113,6 @@ function App() {
         document.querySelector('.output').innerHTML = word.join('');
 
         setTimeout(() => {
-          // e.blur();
           e.style.borderColor = "transparent";
         }, 150)
       })
@@ -144,11 +126,6 @@ function App() {
     console.log(word)
     return (difference/1000).toFixed(2);
   }
-
-  // if(isFirstLetterTyped.current === true) {
-  //   console.log(1)
-  // }
-  
 
   return (
     <>
