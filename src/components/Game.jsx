@@ -1,9 +1,19 @@
 import React, {useEffect, useState} from 'react'
 import Keyboard from './Keyboard';
+// const mongoose = require('mongoose');
+import {connect} from 'mongoose';
 
 const Game = () => {
   const [upcoming_words, setUpcomingWords] = useState(["Murtuza", "Titanic", "Robert"]);
   const [words, setWords] = useState([]);
+  const [connState, setConnState] = useState(true);
+  const db_conn_uri = process.env.REACT_APP_MONGOURI;
+
+  useEffect(() => {
+    connect(db_conn_uri, {
+      useNewUrlParser: true
+    });
+  }, [connState])
   // const [timer, setTimer] = useState(false);
 
   // let alter = false;
@@ -11,7 +21,7 @@ const Game = () => {
   // let alter_time = setInterval(() => {
   //   alter = !alter;
   // }, 1000)
-  console.log(upcoming_words.length)
+  console.log(process.env.REACT_APP_MONGOURI);
 
   useEffect(() => {
     let interval = setInterval(() => {
@@ -24,15 +34,17 @@ const Game = () => {
     }, 5000)
   }, [upcoming_words])
 
-  useEffect(() => {
-    document.querySelector('.stack').innerHTML = '';
-    words.forEach((word, index) => {
-      let div = document.createElement('div');
-      div.className = `word word-${index}`;
-      div.innerHTML = `${word}`;
-      document.querySelector('.stack').appendChild(div);
-    })
-  }, [words])
+  // useEffect(() => {
+  //   document.querySelector('.stack').innerHTML = '';
+  //   words.forEach((word, index) => {
+  //     let div = document.createElement('div');
+  //     div.className = `word word-${index}`;
+  //     div.innerHTML = `${word}`;
+  //     document.querySelector('.stack').appendChild(div);
+  //   })
+  // }, [words])
+
+
   return (
     <>
         <div>game</div>
