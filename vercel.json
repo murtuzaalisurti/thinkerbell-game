@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/wordsData",
+            "destination": "https://thinkerbell-game.vercel.app/wordsData"
+        }
+    ]
+}
