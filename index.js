@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
+const path = require('path');
 
 const Words = require('./models/wordsModel');
 
