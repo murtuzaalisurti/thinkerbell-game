@@ -10,6 +10,10 @@ app.use(express.static(path.resolve(__dirname, './client/public')));
 
 const db_conn_uri = process.env.MONGOURI;
 
+app.get('/', (req, res) => {
+    res.sendFile(path.resolve(__dirname, './client/public', 'index.html'));
+});
+
 app.get('/wordsData', (req, res) => {
     mongoose.connect(db_conn_uri, {
         useNewUrlParser: true
@@ -26,9 +30,5 @@ app.get('/wordsData', (req, res) => {
         console.error(err)
     })
 })
-
-app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, './client/public', 'index.html'));
-});
 
 app.listen(5000, () => console.log('listening'));
