@@ -17,6 +17,8 @@ const Game = () => {
         return prev === false ? !prev : prev;
       })
       
+    }).catch((error) => {
+      console.log(error);
     })
   }, [connState]);
 
