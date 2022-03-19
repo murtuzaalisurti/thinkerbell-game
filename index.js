@@ -28,7 +28,6 @@ app.get('/wordsData', (req, res) => {
         console.error(err)
     })
 })
-
 app.listen(process.env.PORT, () => console.log('listening'));
 
 module.exports = app;
