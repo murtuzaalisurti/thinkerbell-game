@@ -7,12 +7,12 @@ const Words = require('./models/wordsModel');
 const express = require('express');
 const app = express();
 
-app.use(express.static(path.resolve(__dirname, './client/public')));
+app.use(express.static(path.resolve(__dirname, './client/build')));
 
 const db_conn_uri = process.env.MONGOURI;
 
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, './client/public', 'index.html'));
+    res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
 });
 
 app.get('/wordsData', (req, res) => {
@@ -32,4 +32,4 @@ app.get('/wordsData', (req, res) => {
     })
 })
 
-app.listen(5000, () => console.log('listening'));
+app.listen(process.env.PORT, () => console.log('listening'));
