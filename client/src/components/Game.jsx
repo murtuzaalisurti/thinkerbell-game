@@ -7,7 +7,7 @@ const Game = () => {
   const [connState, setConnState] = useState(false);
 
   useEffect(() => {
-    fetch('/wordsData').then((res) => {
+    fetch('https://thinkerbell-game-server.vercel.app/wordsData').then((res) => {
       return res.json();
     }).then((data) => {
       let wordsArray = Object.keys(data).map(key => data[key]);
