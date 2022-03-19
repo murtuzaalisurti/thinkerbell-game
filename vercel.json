@@ -1,8 +1,14 @@
 {
-    "rewrites": [
-        {
-            "source": "/wordsData",
-            "destination": "https://thinkerbell-game.vercel.app/wordsData"
-        }
+    "builds": [
+      {
+        "src": "index.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "index.js"
+      }
     ]
-}
+  }
