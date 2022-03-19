@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import Keyboard from './Keyboard';
+import { connect } from "react-redux";
+import { addAction, subtractAction } from '../actions/actions';
 
-const Game = () => {
+const Game = (props) => {
   const [upcoming_words, setUpcomingWords] = useState([]);
   const [words, setWords] = useState([]);
   const [connState, setConnState] = useState(false);
@@ -66,8 +68,19 @@ const Game = () => {
         <div className="word word-3">{words[2]}</div> */}
         </div>
         <Keyboard />
+        <div className="number">{`${props.num} ${console.log(props)}`}</div>
+        <button className="click" onClick={props.addAction}>increment</button>
     </>
   )
 }
 
-export default Game
+const mapStateToProps = state => ({
+  ...state
+});
+
+const mapDispatchToProps = dispatch => ({
+  addAction: () => dispatch(addAction),
+  subtractAction: () => dispatch(subtractAction)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Game);

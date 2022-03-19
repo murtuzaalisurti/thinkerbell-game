@@ -1,11 +1,13 @@
 import React from 'react'
 import { KeyboardStyle } from './styled/KeyboardStyled'
+import {addAction, subtractAction} from '../actions/actions'
+import {connect} from 'react-redux';
 
-const Keyboard = () => {
+const Keyboard = (props) => {
     
     return (
         <>
-            <div className="output"></div>
+            <div className="output">{props.num}</div>
             <KeyboardStyle className='keyboard'>
                 <div className="row" id="row-1"></div>
                 <div className="row" id="row-2"></div>
@@ -16,4 +18,13 @@ const Keyboard = () => {
     )
 }
 
-export default Keyboard
+const mapStateToProps = state => ({
+    ...state
+  });
+  
+  const mapDispatchToProps = dispatch => ({
+    addAction: () => dispatch(addAction),
+    subtractAction: () => dispatch(subtractAction)
+  });
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(Keyboard);
