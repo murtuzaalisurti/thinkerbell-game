@@ -1,19 +1,20 @@
 import React, {useEffect, useState} from 'react'
 import Keyboard from './Keyboard';
 import { useSelector, useDispatch } from "react-redux";
-import { updateWords } from '../redux-toolkit/aSlice';
+import { updateWords, updateUpcomingWords } from '../redux-toolkit/aSlice';
 
 const Game = () => {
 
-  const reducerWords = useSelector((state) => {
+  const words = useSelector((state) => {
     return state.rootReducer.words;
   })
-  console.log(reducerWords);
+
+  const upcoming_words = useSelector((state) => {
+    return state.rootReducer.upcomingWords;
+  })
 
   const dispatch = useDispatch();
 
-  const [upcoming_words, setUpcomingWords] = useState([]);
-  const [words, setWords] = useState([]);
   const [connState, setConnState] = useState(false);
 
   useEffect(() => {
@@ -21,8 +22,7 @@ const Game = () => {
       return res.json();
     }).then((data) => {
       let wordsArray = Object.keys(data).map(key => data[key]);
-      console.log(wordsArray);
-      setUpcomingWords(wordsArray);
+      dispatch(updateUpcomingWords(wordsArray));
       setConnState(prev => {
         return prev === false ? !prev : prev;
       })
@@ -36,17 +36,16 @@ const Game = () => {
   useEffect(() => {
     if(upcoming_words.length !== 0){
       var interval = setInterval(() => {
-        setWords(prev => {
-          return prev.concat([`${upcoming_words[Math.floor(Math.random() * upcoming_words.length)]}`]);
-        })
+        dispatch(updateWords([`${upcoming_words[Math.floor(Math.random() * upcoming_words.length)]}`]))
       }, 1000)
       setIntervals(prev => [...prev, interval]);
     }
   }, [connState])
-
+  
   useEffect(() => {
     
     if(upcoming_words.length !== 0){
+      console.log(...words)
       console.log(words.length, intervals)
       if(words.length >= 5){
         intervals.forEach((interval) => {
@@ -76,8 +75,6 @@ const Game = () => {
         <div className="word word-3">{words[2]}</div> */}
         </div>
         <Keyboard />
-        <div className="number">{`${reducerWords}`}</div>
-        <button className="click" onClick={() => {dispatch(updateWords(['hey']))}}>increment</button>
     </>
   )
 }

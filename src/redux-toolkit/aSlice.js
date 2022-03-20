@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  words: ['hello', 'murtuza']
+  words: [],
+  upcomingWords: []
 }
 
 export const Slice = createSlice({
@@ -13,12 +14,21 @@ export const Slice = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      state.words = action.payload
+      return {
+        ...state,
+        words: state.words.concat(action.payload)
+      }
+    },
+    updateUpcomingWords: (state, action) => {
+      return {
+        ...state,
+        upcomingWords: action.payload
+      }
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updateWords } = Slice.actions
+export const { updateWords, updateUpcomingWords } = Slice.actions
 
 export default Slice.reducer
