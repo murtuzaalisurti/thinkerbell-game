@@ -1,9 +1,21 @@
 import React, {useEffect, useState} from 'react'
 import Keyboard from './Keyboard';
+import { useSelector, useDispatch } from "react-redux";
+import { updateWords, updateUpcomingWords } from '../redux-toolkit/aSlice';
+import {Stack} from '../components/styled/StackStyled';
 
 const Game = () => {
-  const [upcoming_words, setUpcomingWords] = useState([]);
-  const [words, setWords] = useState([]);
+
+  const words = useSelector((state) => {
+    return state.rootReducer.words;
+  })
+
+  const upcoming_words = useSelector((state) => {
+    return state.rootReducer.upcomingWords;
+  })
+
+  const dispatch = useDispatch();
+
   const [connState, setConnState] = useState(false);
 
   useEffect(() => {
@@ -11,8 +23,7 @@ const Game = () => {
       return res.json();
     }).then((data) => {
       let wordsArray = Object.keys(data).map(key => data[key]);
-      console.log(wordsArray);
-      setUpcomingWords(wordsArray);
+      dispatch(updateUpcomingWords(wordsArray));
       setConnState(prev => {
         return prev === false ? !prev : prev;
       })
@@ -26,23 +37,20 @@ const Game = () => {
   useEffect(() => {
     if(upcoming_words.length !== 0){
       var interval = setInterval(() => {
-        setWords(prev => {
-          return prev.concat([`${upcoming_words[Math.floor(Math.random() * upcoming_words.length)]}`]);
-        })
-      }, 1000)
+        dispatch(updateWords([`${upcoming_words[Math.floor(Math.random() * upcoming_words.length)]}`]))
+      }, 3000)
       setIntervals(prev => [...prev, interval]);
     }
   }, [connState])
-
+  
   useEffect(() => {
-    
     if(upcoming_words.length !== 0){
-      console.log(words.length, intervals)
       if(words.length >= 5){
         intervals.forEach((interval) => {
-          console.log(interval)
           clearInterval(interval);
         })
+        document.querySelector('.game-over').style.display = 'block';
+        document.querySelector('.game-over-message').innerText = 'Game Over';
       }
     }
   }, [words])
@@ -60,14 +68,10 @@ const Game = () => {
 
   return (
     <>
-        <div className="stack">
-          {/* <div className="word word-1">{words[0]}</div>
-          <div className="word word-2">{words[1]}</div>
-        <div className="word word-3">{words[2]}</div> */}
-        </div>
+        <Stack className="stack"></Stack>
         <Keyboard />
     </>
   )
 }
 
-export default Game
+export default Game;

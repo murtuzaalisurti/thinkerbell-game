@@ -4,9 +4,8 @@
   box-sizing: border-box;
 }
 
-.keyboard button{
-  border: 0.1rem solid transparent;
-  outline: none;
-  margin: 0.2rem;
-  padding: 0.5rem;
+#root{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
