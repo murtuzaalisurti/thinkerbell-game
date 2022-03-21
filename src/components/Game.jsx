@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import Keyboard from './Keyboard';
 import { useSelector, useDispatch } from "react-redux";
 import { updateWords, updateUpcomingWords } from '../redux-toolkit/aSlice';
+import {Stack} from '../components/styled/StackStyled';
 
 const Game = () => {
 
@@ -70,11 +71,11 @@ const Game = () => {
 
   return (
     <>
-        <div className="stack">
+        <Stack className="stack">
           {/* <div className="word word-1">{words[0]}</div>
           <div className="word word-2">{words[1]}</div>
         <div className="word word-3">{words[2]}</div> */}
-        </div>
+        </Stack>
         <Keyboard />
     </>
   )
