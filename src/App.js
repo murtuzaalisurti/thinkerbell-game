@@ -1,10 +1,27 @@
 import React, { useEffect, useRef } from 'react';
+import {useSelector, useDispatch} from 'react-redux';
+import { updateTypedWord, updateTypedWord_RemoveLetter, removeWord, updateStartedTypingTime, updateWordTypeSpeed } from './redux-toolkit/aSlice';
 import './App.css';
 import Game from './components/Game.jsx';
 
 function App() {
-  const word = [];
-  var date, date2, difference;
+  const dispatch = useDispatch();
+
+  const typed_word = useSelector((state) => {
+    return state.rootReducer.typedWord;
+  });
+  
+  let newTypedWord = Object.keys(typed_word).map((key) => {
+    return typed_word[key];
+  })
+  
+  let startTypingTime = useSelector((state) => {
+    return state.rootReducer.startTyping;
+  })
+
+  let wordTypeSpeed = useSelector((state) => {
+    return state.rootReducer.wordTypeSpeed;
+  })
 
   useEffect(() => {
     const row1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
@@ -61,19 +78,26 @@ function App() {
   };
 
   const handler = (e) => {
-    if (e.key.toUpperCase() === "BACKSPACE") {
-      word.pop(e.key.toUpperCase());
-    } else if (e.key.toUpperCase() === "SPACE") {
-      return 0;
-    } else if(e.key.toUpperCase() === "ENTER"){
-      console.log(typing_time(date));
+    
+    if(e.which >= 65 && e.which <= 90){
+      newTypedWord.push(e.key.toUpperCase());
+      dispatch(updateTypedWord(newTypedWord));
     } else {
-      word.push(e.key.toUpperCase());
+      if (e.key.toUpperCase() === "BACKSPACE") {
+        newTypedWord.pop()
+        
+        dispatch(updateTypedWord_RemoveLetter(newTypedWord))
+      } else if (e.key.toUpperCase() === "SPACE") {
+        return 0;
+      } else if(e.key.toUpperCase() === "ENTER"){
+        typing_time(startTypingTime);
+      }
     }
 
 
-    if(word.length === 1){
-      date = new Date().getTime();
+    if(typed_word.length === 0){
+      let beginTime = new Date().getTime();
+      dispatch(updateStartedTypingTime(beginTime))
     }
 
 
@@ -87,30 +111,35 @@ function App() {
         }, 150)
       }
     })
-    document.querySelector('.output').innerHTML = word.join('');
   };
-
+  
   useEventListener("keydown", handler);
-
+  
   useEffect(() => {
+    
+    document.querySelector('.output').innerHTML = typed_word.join('');
     document.querySelectorAll('button').forEach((e) => {
       e.addEventListener("click", () => {
 
         e.style.borderColor = "black";
 
         if (e.classList.contains('class-BACKSPACE')) {
-          word.pop(e.innerText.toUpperCase());
+          newTypedWord.pop();
+          dispatch(updateTypedWord_RemoveLetter(newTypedWord));
         } else if(e.classList.contains('class-ENTER')){
-          console.log(typing_time(date));
+          typing_time(startTypingTime);
+          console.log(speed_in_seconds)
         } else {
-          word.push(e.innerText.toUpperCase());
+          newTypedWord.push(e.innerText.toUpperCase());
+          dispatch(updateTypedWord(newTypedWord))
         }
 
-        if(word.length === 1){
-          date = new Date().getTime();
+        if(typed_word.length === 0){
+          let begin = new Date().getTime();
+          dispatch(updateStartedTypingTime(begin));
         }
 
-        document.querySelector('.output').innerHTML = word.join('');
+        document.querySelector('.output').innerHTML = typed_word.join('');
 
         setTimeout(() => {
           e.style.borderColor = "transparent";
@@ -119,13 +148,13 @@ function App() {
     })
   })
 
-  function typing_time(date){
-    date2 = new Date().getTime();
-    difference = date2 - date;
-    word.length = 0;
-    console.log(word)
-    return (difference/1000).toFixed(2);
+  function typing_time(startTypingTime){
+    dispatch(updateWordTypeSpeed(new Date().getTime() - startTypingTime))
+    dispatch(removeWord())
   }
+
+  let speed_in_seconds = (wordTypeSpeed/1000).toFixed(2);
+  console.log(speed_in_seconds)
 
   return (
     <>

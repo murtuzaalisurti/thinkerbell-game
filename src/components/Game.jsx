@@ -36,6 +36,7 @@ const Game = () => {
   useEffect(() => {
     if(upcoming_words.length !== 0){
       var interval = setInterval(() => {
+        
         dispatch(updateWords([`${upcoming_words[Math.floor(Math.random() * upcoming_words.length)]}`]))
       }, 1000)
       setIntervals(prev => [...prev, interval]);
@@ -45,11 +46,11 @@ const Game = () => {
   useEffect(() => {
     
     if(upcoming_words.length !== 0){
-      console.log(...words)
-      console.log(words.length, intervals)
+      
+      
       if(words.length >= 5){
         intervals.forEach((interval) => {
-          console.log(interval)
+          
           clearInterval(interval);
         })
       }

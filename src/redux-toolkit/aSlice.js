@@ -2,7 +2,11 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   words: [],
-  upcomingWords: []
+  upcomingWords: [],
+  typedWord: [],
+  startTyping: 0,
+  endTyping: 0,
+  wordTypeSpeed: 0
 }
 
 export const Slice = createSlice({
@@ -24,11 +28,47 @@ export const Slice = createSlice({
         ...state,
         upcomingWords: action.payload
       }
+    },
+    updateTypedWord: (state, action) => {
+      return {
+        ...state,
+        typedWord: action.payload
+      }
+    },
+    updateTypedWord_RemoveLetter: (state, action) => {
+      return {
+        ...state,
+        typedWord: action.payload
+      }
+    },
+    removeWord: (state, action) => {
+      return {
+        ...state,
+        typedWord: []
+      }
+    },
+    updateStartedTypingTime: (state, action) => {
+      return {
+        ...state,
+        startTyping: action.payload
+      }
+    },
+    updateEndedTypingTime: (state, action) => {
+      return {
+        ...state,
+        endTyping: action.payload
+      }
+    },
+    updateWordTypeSpeed: (state, action) => {
+      return {
+        ...state,
+        wordTypeSpeed: action.payload
+      }
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updateWords, updateUpcomingWords } = Slice.actions
+export const { updateWords, updateUpcomingWords, updateTypedWord, updateTypedWord_RemoveLetter, removeWord, updateEndedTypingTime, updateStartedTypingTime, updateWordTypeSpeed } = Slice.actions
 
 export default Slice.reducer
