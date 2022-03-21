@@ -38,6 +38,7 @@ function App() {
         for (let i = 0; i < row.length; i++) {
           let btn = document.createElement('button');
           btn.classList.add(`class-${row[i]}`);
+          btn.classList.add('key');
           if(row[i] === "ENTER"){
             btn.innerText = 'Enter';
           } else {
@@ -49,6 +50,7 @@ function App() {
         for (let i = 0; i < row.length; i++) {
           let btn = document.createElement('button');
           btn.classList.add(`class-${row[i]}`);
+          btn.classList.add('key');
           btn.innerText = row[i];
           document.querySelector(`#row-${rownum}`).appendChild(btn);
         }
@@ -101,7 +103,7 @@ function App() {
     }
 
 
-    document.querySelectorAll("button").forEach((btn) => {
+    document.querySelectorAll(".key").forEach((btn) => {
 
       if (btn.classList.contains(`class-${e.key.toUpperCase()}`)) {
         btn.style.borderColor = "black";
@@ -118,7 +120,7 @@ function App() {
   useEffect(() => {
     
     document.querySelector('.output').innerHTML = typed_word.join('');
-    document.querySelectorAll('button').forEach((e) => {
+    document.querySelectorAll('.key').forEach((e) => {
       e.addEventListener("click", () => {
 
         e.style.borderColor = "black";
@@ -128,7 +130,6 @@ function App() {
           dispatch(updateTypedWord_RemoveLetter(newTypedWord));
         } else if(e.classList.contains('class-ENTER')){
           typing_time(startTypingTime);
-          console.log(speed_in_seconds)
         } else {
           newTypedWord.push(e.innerText.toUpperCase());
           dispatch(updateTypedWord(newTypedWord))
@@ -154,7 +155,7 @@ function App() {
   }
 
   let speed_in_seconds = (wordTypeSpeed/1000).toFixed(2);
-  console.log(speed_in_seconds)
+  // console.log(speed_in_seconds)
 
   return (
     <>
