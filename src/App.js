@@ -1,11 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import { updateTypedWord, updateTypedWord_RemoveLetter, removeWord, updateStartedTypingTime, updateWordTypeSpeed } from './redux-toolkit/aSlice';
+import {useSelector, useDispatch, batch} from 'react-redux';
+import { updateTypedWord, updateTypedWord_RemoveLetter, removeWord, removeCurrentWord, updateStartedTypingTime, updateWordTypeSpeed, updateWordTypeSpeedSeconds, updateScore, updateMultiplier } from './redux-toolkit/aSlice';
 import './App.css';
 import Game from './components/Game.jsx';
 
 function App() {
   const dispatch = useDispatch();
+
+  const currentWords = useSelector((state) => {
+    return state.rootReducer.words;
+  })
 
   const typed_word = useSelector((state) => {
     return state.rootReducer.typedWord;
@@ -19,8 +23,12 @@ function App() {
     return state.rootReducer.startTyping;
   })
 
-  let wordTypeSpeed = useSelector((state) => {
-    return state.rootReducer.wordTypeSpeed;
+  let score = useSelector((state) => {
+    return state.rootReducer.score;
+  })
+
+  let multiplier = useSelector((state) => {
+    return state.rootReducer.multiplier;
   })
 
   useEffect(() => {
@@ -93,6 +101,26 @@ function App() {
         return 0;
       } else if(e.key.toUpperCase() === "ENTER"){
         typing_time(startTypingTime);
+        let currentwordsduplicate = currentWords.filter((word) => {
+          if(word.toUpperCase() === typed_word.join('').toUpperCase()){
+            return false;
+          } else {
+            return true;
+          }
+        });
+
+        if(currentWords.length !== currentwordsduplicate.length){
+          batch(() => {
+            dispatch(updateMultiplier(multiplier+1))
+            dispatch(updateScore())
+          })          
+        } else {
+          if(multiplier >= 0){
+            dispatch(updateMultiplier(1))
+          }
+        }
+        console.log(currentWords.length === currentwordsduplicate.length)
+        dispatch(removeCurrentWord(currentwordsduplicate))
       }
     }
 
@@ -150,15 +178,32 @@ function App() {
   })
 
   function typing_time(startTypingTime){
-    dispatch(updateWordTypeSpeed(new Date().getTime() - startTypingTime))
-    dispatch(removeWord())
+    let endTime = new Date().getTime() - startTypingTime;
+    batch(() => {
+      dispatch(updateWordTypeSpeed(endTime))
+      dispatch(updateWordTypeSpeedSeconds((endTime/1000).toFixed(2)))
+      dispatch(removeWord())
+    })
   }
 
-  let speed_in_seconds = (wordTypeSpeed/1000).toFixed(2);
-  // console.log(speed_in_seconds)
+  useEffect(() => {
+    document.querySelector('.replay-btn').addEventListener("click", () => {
+      window.location.reload(true);
+    })
+  })
 
   return (
     <>
+      <div className="game-over" style={{display: 'none'}}>
+        <div className="game-over-message"></div>
+        <div className="replay">
+          <button className="replay-btn">Play Again?</button>
+        </div>
+      </div>
+      <div className="score">
+        <div className="total-score">{score}</div>
+        <div className="multiplier">{multiplier}</div>
+      </div>
       <Game />
     </>
   );

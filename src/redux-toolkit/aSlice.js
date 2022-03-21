@@ -6,7 +6,10 @@ const initialState = {
   typedWord: [],
   startTyping: 0,
   endTyping: 0,
-  wordTypeSpeed: 0
+  wordTypeSpeed: 0,
+  wordTypeSpeedSeconds: 0,
+  score: 0,
+  multiplier: 1
 }
 
 export const Slice = createSlice({
@@ -21,6 +24,12 @@ export const Slice = createSlice({
       return {
         ...state,
         words: state.words.concat(action.payload)
+      }
+    },
+    removeCurrentWord: (state, action) => {
+      return {
+        ...state,
+        words: action.payload
       }
     },
     updateUpcomingWords: (state, action) => {
@@ -64,11 +73,29 @@ export const Slice = createSlice({
         ...state,
         wordTypeSpeed: action.payload
       }
+    },
+    updateWordTypeSpeedSeconds: (state, action) => {
+      return {
+        ...state,
+        wordTypeSpeedSeconds: action.payload
+      }
+    },
+    updateScore: (state, action) => {
+      return {
+        ...state,
+        score: state.score + (Math.round(20 - state.wordTypeSpeedSeconds)*state.multiplier)
+      }
+    },
+    updateMultiplier: (state, action) => {
+      return {
+        ...state,
+        multiplier: action.payload
+      }
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updateWords, updateUpcomingWords, updateTypedWord, updateTypedWord_RemoveLetter, removeWord, updateEndedTypingTime, updateStartedTypingTime, updateWordTypeSpeed } = Slice.actions
+export const { updateWords, updateUpcomingWords, updateTypedWord, updateTypedWord_RemoveLetter, removeWord, updateEndedTypingTime, updateStartedTypingTime, updateWordTypeSpeed, updateWordTypeSpeedSeconds, removeCurrentWord, updateScore, updateMultiplier } = Slice.actions
 
 export default Slice.reducer

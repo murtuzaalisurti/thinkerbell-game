@@ -37,23 +37,20 @@ const Game = () => {
   useEffect(() => {
     if(upcoming_words.length !== 0){
       var interval = setInterval(() => {
-        
         dispatch(updateWords([`${upcoming_words[Math.floor(Math.random() * upcoming_words.length)]}`]))
-      }, 1000)
+      }, 3000)
       setIntervals(prev => [...prev, interval]);
     }
   }, [connState])
   
   useEffect(() => {
-    
     if(upcoming_words.length !== 0){
-      
-      
       if(words.length >= 5){
         intervals.forEach((interval) => {
-          
           clearInterval(interval);
         })
+        document.querySelector('.game-over').style.display = 'block';
+        document.querySelector('.game-over-message').innerText = 'Game Over';
       }
     }
   }, [words])
@@ -71,11 +68,7 @@ const Game = () => {
 
   return (
     <>
-        <Stack className="stack">
-          {/* <div className="word word-1">{words[0]}</div>
-          <div className="word word-2">{words[1]}</div>
-        <div className="word word-3">{words[2]}</div> */}
-        </Stack>
+        <Stack className="stack"></Stack>
         <Keyboard />
     </>
   )
