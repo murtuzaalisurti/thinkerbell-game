@@ -9,7 +9,8 @@ const initialState = {
   wordTypeSpeed: 0,
   wordTypeSpeedSeconds: 0,
   score: 0,
-  multiplier: 1
+  multiplier: 1,
+  isGameOver: false
 }
 
 export const Slice = createSlice({
@@ -91,11 +92,17 @@ export const Slice = createSlice({
         ...state,
         multiplier: action.payload
       }
+    },
+    setIsGameOver: (state, action) => {
+      return {
+        ...state,
+        isGameOver: action.payload
+      }
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updateWords, updateUpcomingWords, updateTypedWord, updateTypedWord_RemoveLetter, removeWord, updateEndedTypingTime, updateStartedTypingTime, updateWordTypeSpeed, updateWordTypeSpeedSeconds, removeCurrentWord, updateScore, updateMultiplier } = Slice.actions
+export const { updateWords, updateUpcomingWords, updateTypedWord, updateTypedWord_RemoveLetter, removeWord, updateEndedTypingTime, updateStartedTypingTime, updateWordTypeSpeed, updateWordTypeSpeedSeconds, removeCurrentWord, updateScore, updateMultiplier, setIsGameOver } = Slice.actions
 
 export default Slice.reducer

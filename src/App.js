@@ -3,6 +3,8 @@ import {useSelector, useDispatch, batch} from 'react-redux';
 import { updateTypedWord, updateTypedWord_RemoveLetter, removeWord, removeCurrentWord, updateStartedTypingTime, updateWordTypeSpeed, updateWordTypeSpeedSeconds, updateScore, updateMultiplier } from './redux-toolkit/aSlice';
 import './App.css';
 import Game from './components/Game.jsx';
+import GameOver from './components/GameOver';
+import Score from './components/Score';
 
 function App() {
   const dispatch = useDispatch();
@@ -31,11 +33,15 @@ function App() {
     return state.rootReducer.multiplier;
   })
 
+  let isGameOver = useSelector((state) => {
+    return state.rootReducer.isGameOver;
+  })
+
   useEffect(() => {
     const row1 = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
     const row2 = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
     const row3 = ['Z', 'X', 'C', 'V', 'B', 'N', 'M'];
-    const row4 = ['BACKSPACE', 'ENTER'];
+    const row4 = ['BACKSPACE'];
 
     document.querySelectorAll('.row').forEach((row) => {
       row.innerHTML = "";
@@ -88,7 +94,7 @@ function App() {
   };
 
   const handler = (e) => {
-    
+
     if(e.which >= 65 && e.which <= 90){
       newTypedWord.push(e.key.toUpperCase());
       dispatch(updateTypedWord(newTypedWord));
@@ -100,30 +106,31 @@ function App() {
       } else if (e.key.toUpperCase() === "SPACE") {
         return 0;
       } else if(e.key.toUpperCase() === "ENTER"){
-        typing_time(startTypingTime);
-        let currentwordsduplicate = currentWords.filter((word) => {
-          if(word.toUpperCase() === typed_word.join('').toUpperCase()){
-            return false;
+        if(!isGameOver){
+          typing_time(startTypingTime);
+          let currentwordsduplicate = currentWords.filter((word) => {
+            if(word.toUpperCase() === typed_word.join('').toUpperCase()){
+              return false;
+            } else {
+              return true;
+            }
+          });
+  
+          if(currentWords.length !== currentwordsduplicate.length){
+            batch(() => {
+              dispatch(updateMultiplier(multiplier+1))
+              dispatch(updateScore())
+            })          
           } else {
-            return true;
+            if(multiplier >= 0){
+              dispatch(updateMultiplier(1))
+            }
           }
-        });
-
-        if(currentWords.length !== currentwordsduplicate.length){
-          batch(() => {
-            dispatch(updateMultiplier(multiplier+1))
-            dispatch(updateScore())
-          })          
-        } else {
-          if(multiplier >= 0){
-            dispatch(updateMultiplier(1))
-          }
+          console.log(currentWords.length === currentwordsduplicate.length)
+          dispatch(removeCurrentWord(currentwordsduplicate))
         }
-        console.log(currentWords.length === currentwordsduplicate.length)
-        dispatch(removeCurrentWord(currentwordsduplicate))
       }
     }
-
 
     if(typed_word.length === 0){
       let beginTime = new Date().getTime();
@@ -156,8 +163,6 @@ function App() {
         if (e.classList.contains('class-BACKSPACE')) {
           newTypedWord.pop();
           dispatch(updateTypedWord_RemoveLetter(newTypedWord));
-        } else if(e.classList.contains('class-ENTER')){
-          typing_time(startTypingTime);
         } else {
           newTypedWord.push(e.innerText.toUpperCase());
           dispatch(updateTypedWord(newTypedWord))
@@ -194,16 +199,9 @@ function App() {
 
   return (
     <>
-      <div className="game-over" style={{display: 'none'}}>
-        <div className="game-over-message"></div>
-        <div className="replay">
-          <button className="replay-btn">Play Again?</button>
-        </div>
-      </div>
-      <div className="score">
-        <div className="total-score">{score}</div>
-        <div className="multiplier">{multiplier}</div>
-      </div>
+      <GameOver />
+      <div className="game-name">Word Race</div>
+      <Score score={score} multiplier={multiplier} />
       <Game />
     </>
   );
