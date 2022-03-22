@@ -2,10 +2,23 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  --primary-color: #EEE0CB;
+  --secondary-color: #BAA898;
+  --text-color: #000000;
+  --tertiary-color: #839788;
+  --stack-color: #B9BCAA;
 }
 
 #root{
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: var(--primary-color);
+}
+
+.game-name{
+  padding-top: 2rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 3rem;
 }
