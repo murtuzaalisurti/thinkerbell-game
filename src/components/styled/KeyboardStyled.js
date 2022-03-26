@@ -5,8 +5,12 @@ export const KeyboardStyle = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 4rem;
+    /* margin-bottom: 4rem; */
     font-family: 'Poppins', sans-serif;
+
+    @media screen and (max-width: 35em) {
+        width: 90%;
+    }
 
     .typingOutputContain {
         height: 3rem;
@@ -30,6 +34,12 @@ export const KeyboardStyle = styled.div`
             width: 2rem;
             height: 2rem;
             padding: 0;
+
+            @media screen and (max-width: 35em) {
+            width: fit-content;
+            height: fit-content;
+            padding: 0.45rem;
+        }
         }
     }
     button{
@@ -40,5 +50,13 @@ export const KeyboardStyle = styled.div`
         background-color: var(--secondary-color);
         color: var(--primary-color);
         border-radius: 0.15rem;
+
+        @media screen and (max-width: 35em) {
+            width: fit-content;
+            height: fit-content;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            margin: 0.2rem;
+        }
     }
 `; 

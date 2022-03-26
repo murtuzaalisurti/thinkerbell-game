@@ -22,3 +22,19 @@
   font-family: 'Oswald', sans-serif;
   font-size: 3rem;
 }
+
+.stack-keyboard-contain {
+  display: flex;
+  flex-direction: row-reverse;
+  width: 100%;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 4rem;
+
+}
+@media screen and (max-width: 45em) {
+  .stack-keyboard-contain {
+    flex-direction: column;
+    gap: 3rem;
+  }
+}

@@ -77,10 +77,10 @@ const Game = () => {
 
 
   return (
-    <>
+    <div className="stack-keyboard-contain">
         <Stack className="stack"></Stack>
         <Keyboard />
-    </>
+    </div>
   )
 }
 

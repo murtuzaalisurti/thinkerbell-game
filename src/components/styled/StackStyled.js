@@ -8,7 +8,7 @@ export const Stack = styled.div`
     align-items: center;
     background-color: var(--stack-color);
     color: var(--text-color);
-    margin: 2.5rem 0;
+    /* margin: 2.5rem 0; */
     height: 17.5rem;
     max-height: fit-content;
     font-family: 'Poppins', sans-serif;
