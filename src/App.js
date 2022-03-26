@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import {useSelector, useDispatch, batch} from 'react-redux';
 import { updateTypedWord, updateTypedWord_RemoveLetter, removeWord, removeCurrentWord, updateStartedTypingTime, updateWordTypeSpeed, updateWordTypeSpeedSeconds, updateScore, updateMultiplier } from './redux-toolkit/aSlice';
-import './App.css';
 import Game from './components/Game.jsx';
 import GameOver from './components/GameOver';
 import Score from './components/Score';
